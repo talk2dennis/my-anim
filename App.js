@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import AnimHight from './pages/AnimHight';
 import MovingBox from './pages/MovingBox';
 import AnimatedFlatlist from './pages/AnimatedFlatlist';
+import GestureFlatList from './pages/GestureFlatlist';
 
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
     <View style={styles.container}>
       {/* <AnimHight />
       <MovingBox /> */}
-      <AnimatedFlatlist />
+      <GestureFlatList />
       <StatusBar style="auto" />
     </View>
   );
