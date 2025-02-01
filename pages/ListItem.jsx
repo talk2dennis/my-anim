@@ -1,7 +1,22 @@
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
+
 const ListItem = ({ item, onRemove }) => {
+
+    // render left swipe action
+    const renderLeftAction = () => {
+        return (
+            <>
+                <TouchableOpacity
+                    style={styles.leftAction}
+                    onPress={() => onRemove(item.id)}
+                >
+                    <Text style={styles.actionText}>Edit</Text>
+                </TouchableOpacity>
+            </>
+        )
+    };
 
     // render right swipe action
         const renderRightAction = () => {
@@ -23,6 +38,7 @@ const ListItem = ({ item, onRemove }) => {
             rightThreshold={40}
             onSwipeableRightOpen={() => onRemove(item.id)}
             renderRightActions={renderRightAction}
+            renderLeftActions={renderLeftAction}
         >
             <View style={styles.itemContainer}>
                 <Text style={styles.title}>{item.title}</Text>
@@ -53,16 +69,29 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     rightAction: {
+        marginVertical: 10,
+        marginHorizontal: 10,
+        borderRadius: 10,
         backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
+        width: 150,
+        height: '87%',
+    },
+    leftAction: {
+        marginVertical: 10,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        backgroundColor: 'green',
         justifyContent: 'center',
-        width: 80,
+        alignItems: 'center',
+        width: 150,
         height: '87%',
     },
     actionText: {
         color: 'white',
         fontWeight: '600',
+        fontSize: 18,
     },
     buttonContainer: {
         margin: 20,

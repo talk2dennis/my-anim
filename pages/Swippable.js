@@ -10,6 +10,7 @@ import Data from "../constant/Data";
 
 const Swippable = () => {
     const [data, setData] = useState(Data);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     // toast message
     const toast = (msg) => {
@@ -39,6 +40,15 @@ const Swippable = () => {
         toast(`${removedData.title} [${id}] removed successfully`);
     };
 
+    // edit item
+    const editItem = (id) => {
+        const editedData = data.find(item => item.id === id);
+        if (!editedData) return;
+
+        setData((prevData) => prevData.map(item => item.id === id ? { ...item, title: 'Edited' } : item));
+        toast(`${editedData.title} [${id}] edited successfully`);
+    };
+
 
     // add item button
     const AddButton = () => {
@@ -58,7 +68,7 @@ const Swippable = () => {
                     <ListItem item={item} onRemove={removeItem} />
                 )}
                 onEndReachedThreshold={0.1}
-                onEndReached={() => console.log('end reached')}
+                // onEndReached={() => console.log('end reached')}
             />
             <AddButton />
         </GestureHandlerRootView>
