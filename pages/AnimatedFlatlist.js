@@ -36,18 +36,13 @@ const AnimatedFlatlist = () => {
                 data={data}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Animated.View
-                        style={styles.item}
-                        layout={Layout.springify()}
-                        entering={FadeIn.springify()}
-                        exiting={FadeOut.springify()}
-                    >
+                    <View style={styles.item}>
                         <Pressable onPress={() => removeItem(item.id)}>
                             <Text style={styles.title}>{item.title}</Text>
                         </Pressable>
                         <Text numberOfLines={3} style={styles.body}>{item.body}</Text>
 
-                    </Animated.View>
+                    </View>
                 )}
             />
             <TouchableOpacity onPress={addItem}>

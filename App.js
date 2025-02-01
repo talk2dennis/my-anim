@@ -4,6 +4,8 @@ import AnimHight from './pages/AnimHight';
 import MovingBox from './pages/MovingBox';
 import AnimatedFlatlist from './pages/AnimatedFlatlist';
 import GestureFlatList from './pages/GestureFlatlist';
+import Swipeable from './pages/Swippable';
+import Swippable from './pages/Swippable';
 
 
 const App = () => {
@@ -11,7 +13,7 @@ const App = () => {
     <View style={styles.container}>
       {/* <AnimHight />
       <MovingBox /> */}
-      <GestureFlatList />
+      <Swippable />
       <StatusBar style="auto" />
     </View>
   );
@@ -22,6 +24,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    marginTop: 30,
     // justifyContent: 'center',
   },
 });
