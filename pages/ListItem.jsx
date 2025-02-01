@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     },
     rightAction: {
         marginVertical: 10,
+        marginHorizontal: 5,
         borderRadius: 10,
         backgroundColor: 'red',
         justifyContent: 'center',
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     },
     leftAction: {
         marginVertical: 10,
-        marginHorizontal: 5,
+        marginRight: 10,
         borderRadius: 10,
         backgroundColor: 'green',
         justifyContent: 'center',
