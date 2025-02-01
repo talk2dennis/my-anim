@@ -3,6 +3,7 @@ import { ToastAndroid } from "react-native";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import ListItem from "./ListItem";
+import { ActivityIndicator } from "react-native";
 
 
 import Data from "../constant/Data";
@@ -11,6 +12,10 @@ import Data from "../constant/Data";
 const Swippable = () => {
     const [data, setData] = useState(Data);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [ selectedItem, setSelectedItem ] = useState(null);
+    const [ title, setTitle ] = useState('');
+    const [ body, setBody ] = useState('');
 
     // toast message
     const toast = (msg) => {
@@ -19,6 +24,7 @@ const Swippable = () => {
 
     // add ited to list
     const addItem = () => {
+        setIsRefreshing(true);
         const newId = Math.max(...data.map(item => item.id)) + 1;
         const randomIndex = Math.floor(Math.random() * Data.length);
         const newItem = {
@@ -28,15 +34,18 @@ const Swippable = () => {
         };
 
         setData((prevData) => [newItem, ...prevData]);
+        setIsRefreshing(false);
         toast(`${newItem.title} [${newItem.id}] added successfully`);
     };
 
     // remove item from list
     const removeItem = (id) => {
+        setIsRefreshing(true);
         const removedData = data.find(item => item.id === id);
         if (!removedData) return;
 
         setData((prevData) => prevData.filter(item => item.id !== id));
+        setIsRefreshing(false);
         toast(`${removedData.title} [${id}] removed successfully`);
     };
 
@@ -46,8 +55,17 @@ const Swippable = () => {
         if (!editedData) return;
 
         setData((prevData) => prevData.map(item => item.id === id ? { ...item, title: 'Edited' } : item));
-        toast(`${editedData.title} [${id}] edited successfully`);
+        toast(`${editedData.title} [${id}] updated successfully`);
     };
+
+    // set item and editing
+    const setItem = (item) => {
+        setIsEditing(true);
+        setSelectedItem(item);
+        setTitle(item.title);
+        setBody(item.body);
+        console.log(`Editing: ${item.title}`);
+    }
 
 
     // add item button
@@ -61,16 +79,20 @@ const Swippable = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <FlatList
-                data={data}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => (
-                    <ListItem item={item} onRemove={removeItem} />
-                )}
-                onEndReachedThreshold={0.1}
-                // onEndReached={() => console.log('end reached')}
-            />
-            <AddButton />
+            { isRefreshing ? <ActivityIndicator size="large" color="blue" /> : (
+            <><FlatList
+                    refreshing={true}
+                    data={data}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <ListItem
+                            item={item}
+                            onRemove={removeItem}
+                            onEdit={setItem}
+                        />
+                    )}
+                    onEndReachedThreshold={0.1} /><AddButton /></>
+            )}
         </GestureHandlerRootView>
     )
 };

@@ -2,43 +2,51 @@ import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeabl
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 
-const ListItem = ({ item, onRemove }) => {
+const ListItem = ({ item, onRemove, onEdit }) => {
 
     // render left swipe action
-    const renderLeftAction = () => {
+    // const renderLeftAction = () => {
+    //     return (
+    //         <>
+    //             <TouchableOpacity
+    //                 style={styles.leftAction}
+    //                 onPress={() => onRemove(item.id)}
+    //             >
+    //                 <Text style={styles.actionText}>Edit</Text>
+    //             </TouchableOpacity>
+    //         </>
+    //     )
+    // };
+
+    // render right swipe action
+    const renderRightAction = () => {
         return (
             <>
                 <TouchableOpacity
                     style={styles.leftAction}
-                    onPress={() => onRemove(item.id)}
+                    onPress={() => onEdit(item)}
                 >
                     <Text style={styles.actionText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.rightAction}
+                    onPress={() => onRemove(item.id)}
+                >
+                    <Text style={styles.actionText}>Delete</Text>
                 </TouchableOpacity>
             </>
         )
     };
 
-    // render right swipe action
-        const renderRightAction = () => {
-            return (
-                <>
-                    <TouchableOpacity
-                        style={styles.rightAction}
-                        onPress={() => onRemove(item.id)}
-                    >
-                        <Text style={styles.actionText}>Delete</Text>
-                    </TouchableOpacity>
-                </>
-            )
-        };
-
     return (
         <ReanimatedSwipeable
             friction={2}
             rightThreshold={40}
+            // leftThreshold={40}
             onSwipeableRightOpen={() => onRemove(item.id)}
             renderRightActions={renderRightAction}
-            renderLeftActions={renderLeftAction}
+            // renderLeftActions={renderLeftAction}
+            // onSwipeableLeftOpen={() => onEdit(item)}
         >
             <View style={styles.itemContainer}>
                 <Text style={styles.title}>{item.title}</Text>
@@ -70,22 +78,21 @@ const styles = StyleSheet.create({
     },
     rightAction: {
         marginVertical: 10,
-        marginHorizontal: 10,
         borderRadius: 10,
         backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 150,
+        width: 100,
         height: '87%',
     },
     leftAction: {
         marginVertical: 10,
-        marginHorizontal: 10,
+        marginHorizontal: 5,
         borderRadius: 10,
         backgroundColor: 'green',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 150,
+        width: 100,
         height: '87%',
     },
     actionText: {
