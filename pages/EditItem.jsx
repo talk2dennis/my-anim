@@ -26,7 +26,7 @@ const EditItem = ({ title, body, setTitle, setBody, setIsEditing, selectedItem, 
             }} style={styles.buttonContainer}>
                 <Text style={styles.btn}>Save</Text>
             </TouchableOpacity>
-            // Add a cancel button
+            {/* // Add a cancel button */}
             <TouchableOpacity onPress={() => setIsEditing(false)} style={[styles.buttonContainer, styles.cancelButton]}>
                 <Text style={styles.btn}>Cancel</Text>
             </TouchableOpacity>
