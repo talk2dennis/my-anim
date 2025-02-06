@@ -1,25 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
-const EditItem = ({ title, body, setTitle, setBody, setIsEditing, selectedItem, editItem }) => {
+const CreateNote = ({ addNote, handleCreateNote, toast }) => {
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+
+
+    const handleAddNote = () => {
+        if (!title.trim() || !body.trim()) {
+            toast('Please fill all fields');
+            return;
+        }
+        addNote({
+            title,
+            body,
+        });
+        setTitle('');
+        setBody('');
+        handleCreateNote();
+    };
+
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity onPress={() => setIsEditing(false)}>
+                <TouchableOpacity onPress={handleCreateNote}>
                     <Ionicons name="arrow-back" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Edit Item</Text>
+                <Text style={styles.title}>Create Note</Text>
             </View>
             <Text style={styles.label}>Title</Text>
             <TextInput
+                placeholder="Enter title"
+                placeholderTextColor={'gray'}
                 style={styles.input}
                 value={title}
                 onChangeText={setTitle}
             />
             <Text style={styles.label}>Body</Text>
             <TextInput
+                placeholder="Your note here"
+                placeholderTextColor={'gray'}
                 multiline={true}
                 numberOfLines={15}
                 style={[styles.input, styles.textArea]}
@@ -27,18 +49,18 @@ const EditItem = ({ title, body, setTitle, setBody, setIsEditing, selectedItem, 
                 onChangeText={setBody}
             />
             <TouchableOpacity onPress={() => {
-                editItem(selectedItem.id);
-                setIsEditing(false);
+                handleAddNote()
             }} style={styles.buttonContainer}>
                 <Text style={styles.btn}>Save</Text>
             </TouchableOpacity>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
         padding: 20,
     },
     title: {
@@ -60,7 +82,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     textArea: {
-        height: '300',
+        height: 150,
         textAlignVertical: 'top',
     },
     buttonContainer: {
@@ -68,16 +90,12 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
-        marginVertical: 10,
     },
     btn: {
         color: 'white',
-        fontWeight: 'bold',
         fontSize: 16,
-    },
-    cancelButton: {
-        backgroundColor: 'grey',
+        fontWeight: 'bold',
     },
 });
 
-export default EditItem;
+export default CreateNote;

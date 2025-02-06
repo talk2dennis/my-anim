@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 
 
-const ListItem = ({ item, onRemove, onEdit }) => {
+const ListItem = ({ item, onRemove, onEdit, isExpanded, toggleExpand }) => {
+    const [showMoreButton, setShowMoreButton] = useState(false);
 
     // render left swipe action
     // const renderLeftAction = () => {
@@ -45,13 +47,32 @@ const ListItem = ({ item, onRemove, onEdit }) => {
             // leftThreshold={40}
             onSwipeableRightOpen={() => onRemove(item.id)}
             renderRightActions={renderRightAction}
-            // renderLeftActions={renderLeftAction}
-            // onSwipeableLeftOpen={() => onEdit(item)}
+        // renderLeftActions={renderLeftAction}
+        // onSwipeableLeftOpen={() => onEdit(item)}
         >
-            <View style={styles.itemContainer}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.text}>{item.body}</Text>
-            </View>
+            <TouchableWithoutFeedback onPress={() => toggleExpand(item.id)}>
+                <View style={styles.itemContainer}>
+                    <Text style={styles.title}>{item.title}</Text>
+                    <Text style={styles.text}
+                        numberOfLines={isExpanded ? undefined : 4}
+                        onTextLayout={(e) => {
+                            setShowMoreButton(e.nativeEvent.lines.length > 4)
+                        }
+                        }
+                    >
+                        {item.body}
+                    </Text>
+                    {/* show more line if more than 4 lines */}
+                    {showMoreButton && (
+                        <Text
+                            onPress={() => toggleExpand(item.id)}
+                            style={[styles.text, styles.showMore]}
+                        >
+                            {isExpanded ? 'Show less' : 'Show more'}
+                        </Text>
+                    )}
+                </View>
+            </TouchableWithoutFeedback>
         </ReanimatedSwipeable>
     );
 };
@@ -68,6 +89,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        width: '100%',
     },
     title: {
         fontSize: 24,
@@ -84,7 +106,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 100,
-        height: '87%',
+        height: 100,
     },
     leftAction: {
         marginVertical: 10,
@@ -94,7 +116,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 100,
-        height: '87%',
+        height: 100,
     },
     actionText: {
         color: 'white',
@@ -110,6 +132,11 @@ const styles = StyleSheet.create({
     btn: {
         color: 'white',
         fontWeight: 'bold',
+    },
+    showMore: {
+        color: 'blue',
+        marginTop: 10,
+        textAlign: 'right',
     },
 });
 
