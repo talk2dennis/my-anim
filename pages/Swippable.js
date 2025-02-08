@@ -34,7 +34,7 @@ const Swippable = () => {
         return (
             <View style={styles.headerContainer}>
                 <View>
-                    <Text style={styles.headerText}>Swippable List</Text>
+                    <Text style={styles.headerText}>Smart Note</Text>
                 </View>
                 <View style={styles.headerIcon}>
                     <TouchableOpacity onPress={handleMenu}>

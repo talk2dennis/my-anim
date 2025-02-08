@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { API_KEY } from 'react-native-dotenv';
 
 
 const CreateNote = ({ addNote, handleCreateNote, toast }) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+
+    // log the key
+    console.log(API_KEY);
 
 
     const handleAddNote = () => {
