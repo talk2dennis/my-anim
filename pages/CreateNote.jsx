@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { API_KEY, MY_KEY } from 'react-native-dotenv';
-import OpenAI from "openai";
-import Anthropic from '@anthropic-ai/sdk';
+import { API_KEY, MY_KEY, GEM_KEY } from 'react-native-dotenv';
+// import OpenAI from "openai";
+// import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 
-const Loading = ({msg}) => {
+const Loading = ({ msg }) => {
     return (
         <View style={styles.loadingContainer}>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -24,38 +25,22 @@ const CreateNote = ({ addNote, handleCreateNote, toast }) => {
     const [body, setBody] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // return response from openAi
-    const openai = new OpenAI({
-        apiKey: API_KEY,
-        dangerouslyAllowBrowser: true,
-    });
-
-    const anthropic = new Anthropic({
-        apiKey: MY_KEY,
-        dangerouslyAllowBrowser: true,
-        });
+    const genAI = new GoogleGenerativeAI(GEM_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 
     const getResponse = async () => {
+        if (!title.trim()) {
+            toast('Please enter a title for AI to generate content');
+            return;
+        }
         try {
             setLoading(true);
 
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o",
-                messages: [
-                    { role: "system", content: "You are a helpful assistant." },
-                    { role: "user", content: `Explain ${title} in a simple way.` }
-                ],
-            });
+            const result = await model.generateContent(`Please write a note about ${title}. Avoid using markdown. Take the role of a lecturer`);
 
-            setBody(response.choices[0].message.content);
-            console.log(response.choices[0].message.content);
-            // const msg = await anthropic.messages.create({
-            //     model: "claude-3-5-sonnet-20241022",
-            //     max_tokens: 1024,
-            //     messages: [{ role: "user", content: "Hello, Claude" }],
-            //   });
-            //   console.log(msg);
+            setBody(result.response.text());
+
         } catch (error) {
             console.log("OpenAI Error:", error);
             toast("Error fetching response");
@@ -67,11 +52,15 @@ const CreateNote = ({ addNote, handleCreateNote, toast }) => {
 
 
     const handleAddNote = () => {
-        setLoading(true);
-        if (!title.trim() || !body.trim()) {
-            toast('Please fill all fields');
+        if (!title.trim()) {
+            toast('Please fill in the title');
             return;
         }
+        if (!body.trim()) {
+            toast('Please fill in the body');
+            return;
+        }
+        setLoading(true);
         addNote({
             title,
             body,
@@ -84,7 +73,7 @@ const CreateNote = ({ addNote, handleCreateNote, toast }) => {
 
     return (
         <>
-            {loading && <Loading msg={"Fetching response from OpenAI..."}/>}
+            {loading && <Loading msg={"Fetching response from Gemini..."} />}
             <View style={styles.container}>
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={handleCreateNote}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCo } from 'react';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 
@@ -79,6 +79,7 @@ const ListItem = ({ item, onRemove, onEdit, isExpanded, toggleExpand }) => {
 
 const styles = StyleSheet.create({
     itemContainer: {
+        flex: 1,
         backgroundColor: 'white',
         padding: 20,
         marginVertical: 8,
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        width: '100%',
+        minHeight: 120,
     },
     title: {
         fontSize: 24,

@@ -1,21 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet } from 'react-native';
-import AnimHight from './pages/AnimHight';
-import MovingBox from './pages/MovingBox';
-import AnimatedFlatlist from './pages/AnimatedFlatlist';
-import GestureFlatList from './pages/GestureFlatlist';
-import Swipeable from './pages/Swippable';
 import Swippable from './pages/Swippable';
+import {NoteProvider} from './context/NoteContext';
 
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      {/* <AnimHight />
-      <MovingBox /> */}
-      <Swippable />
-      <StatusBar style="auto" />
-    </View>
+    <NoteProvider>
+      <View style={styles.container}>
+        <Swippable />
+        <StatusBar style="auto" />
+      </View>
+    </NoteProvider>
   );
 }
 

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ToastAndroid, View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import { GestureHandlerRootView, Pressable } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ListItem from "./ListItem";
 import CreateNote from "./CreateNote";
 import EditItem from "./EditItem";
-import Data from "../constant/Data";
+import {NoteContext} from "../context/NoteContext";
 
 const Swippable = () => {
-    const [data, setData] = useState(Data);
+    const [data, setData] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isCreateNote, setIsCreateNote] = useState(false);
@@ -16,8 +16,15 @@ const Swippable = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
-
     const [isEpanded, setIsExpanded] = useState(null);
+
+    // initialise the noteContext
+    const context = useContext(NoteContext);
+    const { notes, addNote, removeNote, setNotes, getNoteById, updateNote } = context;
+    
+    useEffect(() => {
+        setData(notes);
+    }, [notes]);
 
     const toggleExpand = (id) => {
         setIsExpanded(isEpanded === id ? null : id);
@@ -81,39 +88,30 @@ const Swippable = () => {
     // remove item with an id
     const removeItem = (id) => {
         setIsRefreshing(true);
-        const removedData = data.find(item => item.id === id);
-        if (!removedData) return;
-
-        setData((prevData) => prevData.filter(item => item.id !== id));
+        const removedData = getNoteById(id);
+        removeNote(id);
         setIsRefreshing(false);
-        toast(`${removedData.title} [${id}] removed successfully`);
+        toast(`${removedData.title} removed successfully`);
     };
 
     // add Note
-    const addNote = ({ title, body }) => {
+    const handleAddNote = ({ title, body }) => {
         setIsRefreshing(true);
-        const newId = Math.max(...data.map(item => item.id)) + 1;
-        const newItem = { id: newId, title, body };
-
-        setData((prevData) => [newItem, ...prevData]);
-        setIsRefreshing(false);
-        toast(`${newItem.title} [${newItem.id}] added successfully`);
+        addNote({
+            title,
+            body,
+        });
+        toast(`${title} added successfully`);
     };
 
     // edit item
     const editItem = (id) => {
         const editedData = data.find(item => item.id === id);
         if (!editedData) return;
-
-        const updatedData = data.map(item => {
-            if (item.id === id) {
-                return { ...item, title, body };
-            }
-            return item;
-        });
-        // Update the state
-        setData(updatedData);
-        toast(`${editedData.title} [${id}] updated successfully`);
+        editedData.title = title;
+        editedData.body = body;
+        updateNote(id, editedData);
+        toast(`${editedData.title} updated successfully`);
     };
 
     const setItem = (item) => {
@@ -134,7 +132,7 @@ const Swippable = () => {
     if (isCreateNote) {
         return (
             <CreateNote
-                addNote={addNote}
+                addNote={handleAddNote}
                 handleCreateNote={handleCreateNote}
                 toast={toast}
             />
@@ -143,7 +141,7 @@ const Swippable = () => {
 
     return (
 
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, width: '100%' }}>
         {isEditing ? (
             <EditItem
                 title={title}
