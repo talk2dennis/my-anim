@@ -60,7 +60,7 @@ const FAQ = ({ setFaq }) => {
     return (
         <View style={styles.container}>
             <View style={styles.headContainer}>
-                <TouchableOpacity onPress={() => setFaq(false)}>
+                <TouchableOpacity onPress={() => setFaq()}>
                     <Ionicons name="arrow-back" size={30} color="black" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Frequently Asked Questions</Text>
@@ -92,16 +92,22 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     question: {
-        fontSize: 16,
-        fontWeight: "bold"
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 8,
+        letterSpacing: 0.5
     },
     icon: {
         fontSize: 18,
         color: "#555"
     },
     answer: {
-        marginTop: 5,
-        fontSize: 14, color: "#444"
+        fontSize: 17,
+        lineHeight: 24,
+        letterSpacing: 0.3,
+        color: '#555',
+        textAlign: 'justify'
     },
     headContainer: {
         flexDirection: 'row',

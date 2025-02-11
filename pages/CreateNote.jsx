@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
     },
     buttonContainer: {
-        backgroundColor: 'blue',
+        backgroundColor: '#B99C8D',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
     },
     btn: {
-        color: 'white',
+        color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
     },
