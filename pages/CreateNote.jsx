@@ -37,10 +37,9 @@ const CreateNote = ({ addNote, handleCreateNote, toast }) => {
         try {
             setLoading(true);
 
-            const result = await model.generateContent(`Please write a note about ${title}. Avoid using markdown. Take the role of a lecturer`);
+            const result = await model.generateContent(`Please write a note about ${title}. Avoid using markdown. Break the note into paragraphs.`);
 
             setBody(result.response.text());
-
         } catch (error) {
             console.log("OpenAI Error:", error);
             toast("Error fetching response");
@@ -75,40 +74,42 @@ const CreateNote = ({ addNote, handleCreateNote, toast }) => {
         <>
             {loading && <Loading msg={"Fetching response from Gemini..."} />}
             <View style={styles.container}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={styles.headContainer}>
                     <TouchableOpacity onPress={handleCreateNote}>
                         <Ionicons name="arrow-back" size={30} color="black" />
                     </TouchableOpacity>
-                    <Text style={styles.title}>Create Note</Text>
+                    <Text style={styles.hTitle}>Create Note</Text>
                 </View>
-                <Text style={styles.label}>Title</Text>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={styles.body}>
+                    <Text style={styles.label}>Title</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <TextInput
+                            placeholder="Enter title"
+                            placeholderTextColor={'gray'}
+                            style={styles.input}
+                            value={title}
+                            onChangeText={setTitle}
+                        />
+                        <TouchableOpacity onPress={getResponse}>
+                            <Ionicons name="chatbox-ellipses" size={30} color="black" />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.label}>Body</Text>
                     <TextInput
-                        placeholder="Enter title"
+                        placeholder="Your note here"
                         placeholderTextColor={'gray'}
-                        style={styles.input}
-                        value={title}
-                        onChangeText={setTitle}
+                        multiline={true}
+                        numberOfLines={15}
+                        style={[styles.input, styles.textArea]}
+                        value={body}
+                        onChangeText={setBody}
                     />
-                    <TouchableOpacity onPress={getResponse}>
-                        <Ionicons name="chatbox-ellipses" size={30} color="black" />
+                    <TouchableOpacity onPress={() => {
+                        handleAddNote()
+                    }} style={styles.buttonContainer}>
+                        <Text style={styles.btn}>Save</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.label}>Body</Text>
-                <TextInput
-                    placeholder="Your note here"
-                    placeholderTextColor={'gray'}
-                    multiline={true}
-                    numberOfLines={15}
-                    style={[styles.input, styles.textArea]}
-                    value={body}
-                    onChangeText={setBody}
-                />
-                <TouchableOpacity onPress={() => {
-                    handleAddNote()
-                }} style={styles.buttonContainer}>
-                    <Text style={styles.btn}>Save</Text>
-                </TouchableOpacity>
             </View>
         </>
     );
@@ -118,13 +119,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        padding: 20,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
         marginLeft: 30,
+    },
+    body: {
+        padding: 20,
+        flex: 1,
     },
     label: {
         fontSize: 16,
@@ -168,6 +172,17 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 20,
     },
+    headContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#B99C8D',
+        paddingLeft: 20,
+        paddingVertical: 20,
+    },
+    hTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginHorizontal: 20,
+    }
 });
 
 export default CreateNote;

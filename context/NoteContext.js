@@ -17,7 +17,7 @@ export const NoteProvider = ({ children }) => {
                     notesJson.sort((a, b) => b.id - a.id);
                     setNotes(notesJson);
                 } else {
-                    setNotes([{ id: 1, title: "Welcome to Notes", description: "You can add, edit, and delete notes in this app.", createdAt: Date.now(), completed: false, tags: ["welcome"] }]);
+                    setNotes([{ id: 1, title: "Welcome to Notes", body: "You can add, edit, and delete notes in this app.", createdAt: Date.now(), completed: false, tags: ["welcome"] }]);
                 }
             } catch (error) {
                 console.error("Failed to load notes:", error);

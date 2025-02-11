@@ -5,7 +5,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ListItem from "./ListItem";
 import CreateNote from "./CreateNote";
 import EditItem from "./EditItem";
-import {NoteContext} from "../context/NoteContext";
+import FAQ from "./components/FAQ";
+import { NoteContext } from "../context/NoteContext";
 
 const Swippable = () => {
     const [data, setData] = useState([]);
@@ -17,11 +18,12 @@ const Swippable = () => {
     const [body, setBody] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
     const [isEpanded, setIsExpanded] = useState(null);
+    const [faq, setFaq] = useState(false);
 
     // initialise the noteContext
     const context = useContext(NoteContext);
     const { notes, addNote, removeNote, setNotes, getNoteById, updateNote } = context;
-    
+
     useEffect(() => {
         setData(notes);
     }, [notes]);
@@ -34,6 +36,12 @@ const Swippable = () => {
     const handleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+
+    // handle faq
+    const handleFaq = () => {
+        setMenuOpen(false);
+        setFaq(!faq);
+    }
 
 
     // Header component
@@ -67,8 +75,8 @@ const Swippable = () => {
                 <TouchableOpacity onPress={handleCreateNote}>
                     <Text style={styles.drwText}>Create Note</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={null}>
-                    <Text style={styles.drwText}>Contact</Text>
+                <TouchableOpacity onPress={handleFaq}>
+                    <Text style={styles.drwText}>FAQ</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -81,6 +89,7 @@ const Swippable = () => {
 
     // handle create note state
     const handleCreateNote = () => {
+        setMenuOpen(false);
         setIsCreateNote(!isCreateNote);
     };
 
@@ -139,44 +148,53 @@ const Swippable = () => {
         )
     }
 
+    // FAQ screen
+    if (faq) {
+        return (
+            <FAQ
+                setFaq={handleFaq}
+            />
+        )
+    }
+
     return (
 
-    <GestureHandlerRootView style={{ flex: 1, width: '100%' }}>
-        {isEditing ? (
-            <EditItem
-                title={title}
-                body={body}
-                setTitle={setTitle}
-                setBody={setBody}
-                setIsEditing={setIsEditing}
-                selectedItem={selectedItem}
-                editItem={editItem}
-            />
-        ) : (
-            <>
-                {<Header
-                    menuOpen={menuOpen}
-                    handleMenu={handleMenu}
-                />}
-                {menuOpen && <Drawer />}
-                <FlatList
-                    data={data}
-                    keyExtractor={item => item.id.toString()}
-                    refreshing={isRefreshing}
-                    renderItem={({ item }) => (
-                        <ListItem
-                            item={item}
-                            onRemove={removeItem}
-                            onEdit={setItem}
-                            isExpanded={isEpanded === item.id}
-                            toggleExpand={toggleExpand}
-                        />
-                    )}
+        <GestureHandlerRootView style={{ flex: 1, width: '100%' }}>
+            {isEditing ? (
+                <EditItem
+                    title={title}
+                    body={body}
+                    setTitle={setTitle}
+                    setBody={setBody}
+                    setIsEditing={setIsEditing}
+                    selectedItem={selectedItem}
+                    editItem={editItem}
                 />
-                <AddButton />
-            </>
-        )}
-    </GestureHandlerRootView>
+            ) : (
+                <>
+                    {<Header
+                        menuOpen={menuOpen}
+                        handleMenu={handleMenu}
+                    />}
+                    {menuOpen && <Drawer />}
+                    <FlatList
+                        data={data}
+                        keyExtractor={item => item.id.toString()}
+                        refreshing={isRefreshing}
+                        renderItem={({ item }) => (
+                            <ListItem
+                                item={item}
+                                onRemove={removeItem}
+                                onEdit={setItem}
+                                isExpanded={isEpanded === item.id}
+                                toggleExpand={toggleExpand}
+                            />
+                        )}
+                    />
+                    <AddButton />
+                </>
+            )}
+        </GestureHandlerRootView>
     )
 };
 
