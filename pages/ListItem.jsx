@@ -68,7 +68,7 @@ const ListItem = ({ item, onRemove, onEdit, isExpanded, toggleExpand }) => {
                                 <Ionicons name="copy" size={24} color="#B99C8D" style={{ paddingHorizontal: 10 }} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => onEdit(item)}>
-                                <Ionicons name="create" size={24} color="green" style={{ paddingHorizontal: 10 }} />
+                                <Ionicons name="create" size={24} color="blue" style={{ paddingHorizontal: 10 }} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => onRemove(item.id)}>
                                 <Ionicons name="trash" size={24} color="red" style={{ paddingHorizontal: 10 }} />
@@ -77,6 +77,7 @@ const ListItem = ({ item, onRemove, onEdit, isExpanded, toggleExpand }) => {
                         <Text
                             style={styles.text}
                             numberOfLines={isExpanded ? undefined : 5}
+                            selectable={true}
                             onTextLayout={(e) => {
                                 setShowMoreButton(e.nativeEvent.lines.length > 5)
                             }
