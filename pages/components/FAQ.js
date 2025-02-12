@@ -31,7 +31,7 @@ const faqData = [
     {
         id: "6",
         question: "Can I copy a note to the clipboard?",
-        answer: "Yes! If you need to copy a note's content, open the note and tap the 'Copy to Clipboard' button.\n\nYou will see a confirmation message indicating that the text has been copied successfully.\n\nAfter that, you can paste the copied text anywhere by long-pressing in a text field and selecting 'Paste'.\n\nThis is useful for quickly transferring notes to other apps, messages, or documents."
+        answer: "Yes! If you need to copy a note's content, you have two options:\n\n- Use the 'Copy to Clipboard' button: Open the note and tap the 'Copy to Clipboard' button. This will instantly copy the content, and you’ll see a confirmation message.\n\nLong press on the title or body: You can also long press on the title or body of the note. A copy option will appear, allowing you to select and copy specific text. This is useful for quickly pasting content into messages, documents, or other apps."
     },
     {
         id: "7",

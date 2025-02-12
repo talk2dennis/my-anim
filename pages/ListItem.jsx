@@ -1,6 +1,8 @@
 import React, { useState, useCo } from 'react';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import { copyToClipboard } from '../utils/Clipboard';
 
 
 const ListItem = ({ item, onRemove, onEdit, isExpanded, toggleExpand }) => {
@@ -52,25 +54,44 @@ const ListItem = ({ item, onRemove, onEdit, isExpanded, toggleExpand }) => {
         >
             <TouchableWithoutFeedback onPress={() => toggleExpand(item.id)}>
                 <View style={styles.itemContainer}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.text}
-                        numberOfLines={isExpanded ? undefined : 4}
-                        onTextLayout={(e) => {
-                            setShowMoreButton(e.nativeEvent.lines.length > 4)
-                        }
-                        }
-                    >
-                        {item.body}
-                    </Text>
-                    {/* show more line if more than 4 lines */}
-                    {showMoreButton && (
+                    <View style={styles.titleContainer}>
                         <Text
-                            onPress={() => toggleExpand(item.id)}
-                            style={[styles.text, styles.showMore]}
+                            onLongPress={() => copyToClipboard(item.title)}
+                            style={styles.title}
                         >
-                            {isExpanded ? 'Show less' : 'Show more'}
+                            {item.title}
                         </Text>
-                    )}
+                    </View>
+                    <View>
+                        <View style={styles.iconContainer}>
+                            <TouchableOpacity onPress={() => copyToClipboard(item.body)}>
+                                <Ionicons name="copy" size={24} color="#B99C8D" style={{ paddingHorizontal: 10 }} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => onEdit(item)}>
+                                <Ionicons name="create" size={24} color="green" style={{ paddingHorizontal: 10 }} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => onRemove(item.id)}>
+                                <Ionicons name="trash" size={24} color="red" style={{ paddingHorizontal: 10 }} />
+                            </TouchableOpacity>
+                        </View>
+                        <Text
+                            style={styles.text}
+                            numberOfLines={isExpanded ? undefined : 5}
+                            onTextLayout={(e) => {
+                                setShowMoreButton(e.nativeEvent.lines.length > 5)
+                            }
+                            }
+                        >
+                            {item.body}
+                        </Text>
+                        {showMoreButton && (
+                            <TouchableOpacity onPress={() => toggleExpand(item.id)}>
+                                <Text style={styles.showMore}>
+                                    {isExpanded ? "Show less" : "Show more"}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
             </TouchableWithoutFeedback>
         </ReanimatedSwipeable>
@@ -81,7 +102,6 @@ const styles = StyleSheet.create({
     itemContainer: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 20,
         marginVertical: 8,
         marginHorizontal: 8,
         borderRadius: 10,
@@ -92,12 +112,28 @@ const styles = StyleSheet.create({
         elevation: 5,
         minHeight: 120,
     },
+    titleContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+        backgroundColor: '#f8f8f8',
+        padding: 10,
+        borderBottomLeftRadius: 10,
+    },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 8,
+        letterSpacing: 0.5,
+        textAlign: 'center',
     },
     text: {
-        fontSize: 16,
+        fontSize: 17,
+        lineHeight: 24,
+        letterSpacing: 0.3,
+        color: '#555',
+        textAlign: 'justify',
+        paddingHorizontal: 10,
     },
     rightAction: {
         marginVertical: 10,
@@ -135,9 +171,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     showMore: {
-        color: 'blue',
-        marginTop: 10,
-        textAlign: 'right',
+        fontSize: 16,
+        color: "#007BFF",
+        fontWeight: "bold",
+        textAlign: "right",
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        margin: 20,
     },
 });
 

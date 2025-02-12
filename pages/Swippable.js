@@ -159,7 +159,7 @@ const Swippable = () => {
 
     return (
 
-        <GestureHandlerRootView style={{ flex: 1, width: '100%' }}>
+        <GestureHandlerRootView style={{ flex: 1, width: '100%', backgroundColor: '#f8f8f8' }}>
             {isEditing ? (
                 <EditItem
                     title={title}
@@ -178,8 +178,8 @@ const Swippable = () => {
                     />}
                     {menuOpen && <Drawer />}
                     <FlatList
-                        data={data}
-                        keyExtractor={item => item.id.toString()}
+                        data={data || []}
+                        keyExtractor={item => item.id}
                         refreshing={isRefreshing}
                         renderItem={({ item }) => (
                             <ListItem
@@ -188,6 +188,11 @@ const Swippable = () => {
                                 onEdit={setItem}
                                 isExpanded={isEpanded === item.id}
                                 toggleExpand={toggleExpand}
+                                ListEmptyComponent={() => ( // Ensure it's wrapped in a function
+                                    <View style={styles.emptyContainer}>
+                                      <Text style={styles.emptyText}>No notes found. Start adding your first note!</Text>
+                                    </View>
+                                  )}
                             />
                         )}
                     />
@@ -241,15 +246,16 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         padding: 10,
     },
-    // bulge: {
-    //     position: 'absolute',
-    //     bottom: -15, // Move down to create the effect
-    //     right: -10, // Adjust position to bulge out
-    //     width: 30,
-    //     height: 50,
-    //     backgroundColor: 'lightblue',
-    //     borderRadius: 10, // Perfectly circulard
-    // },
+    emptyContainer: {
+        marginTop: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      emptyText: {
+        fontSize: 16,
+        color: '#888',
+        fontStyle: 'italic',
+      },
 
 });
 
